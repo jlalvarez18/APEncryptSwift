@@ -30,6 +30,70 @@ class APRSAKeyPair {
         self.privateKey = privateKey
         self.identifier = identifier
     }
+    
+    func encrypt(string: String) -> NSString? {
+        let plainTextData = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let plainTextBuffer = UnsafePointer<UInt8>(plainTextData.bytes)
+        let plainTextLength = UInt(plainTextData.length)
+        
+        let blockSize = SecKeyGetBlockSize(publicKey)
+        
+        let cipherData = NSMutableData(length: Int(blockSize))!
+        let cipherBuffer = UnsafeMutablePointer<UInt8>(cipherData.mutableBytes)
+        var cipherBufferLength = size_t(cipherData.length)
+        
+        let padding: SecPadding = SecPadding(kSecPaddingPKCS1)
+        
+        let status = SecKeyEncrypt(
+            publicKey,
+            padding,
+            plainTextBuffer,
+            plainTextLength,
+            cipherBuffer,
+            &cipherBufferLength
+        )
+        
+        if status == errSecSuccess {
+            let encryptedString = cipherData.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(0))
+            
+            return encryptedString
+        } else {
+            println(status)
+        }
+        
+        return nil
+    }
+    
+    func decryptString(string: String) -> String? {
+        let blockSize = SecKeyGetBlockSize(privateKey)
+        
+        let cipherData = NSData(base64EncodedString: string, options: NSDataBase64DecodingOptions(0))!
+        let cipherBuffer = UnsafePointer<UInt8>(cipherData.bytes)
+        let cipherSize = size_t(cipherData.length)
+        
+        let plainTextData = NSMutableData(length: Int(blockSize))!
+        let plainTextBuffer = UnsafeMutablePointer<UInt8>(plainTextData.mutableBytes)
+        var plainTextBufferLength = size_t(blockSize)
+        
+        let padding: SecPadding = SecPadding(kSecPaddingPKCS1)
+        
+        let status = SecKeyDecrypt(
+            privateKey,
+            padding,
+            cipherBuffer,
+            cipherSize,
+            plainTextBuffer,
+            &plainTextBufferLength
+        )
+        
+        if status == errSecSuccess {
+            let decryptedString = NSString(bytes: plainTextBuffer, length: Int(plainTextBufferLength), encoding: NSUTF8StringEncoding)
+            
+            return decryptedString
+        }
+        
+        return nil
+    }
 }
 
 class APEncryptRSA {
@@ -87,6 +151,7 @@ class APEncryptRSA {
             return nil
         }
     }
+    
 }
 
 private extension APEncryptRSA {

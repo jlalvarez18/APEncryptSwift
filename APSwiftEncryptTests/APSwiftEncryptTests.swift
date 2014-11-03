@@ -40,4 +40,25 @@ class APSwiftEncryptTests: XCTestCase {
         
         XCTAssertNotNil(keyPair!, "keyPair should not be nil")
     }
+    
+    func testEncryption() {
+        let keyPair = APEncryptRSA.getKeyPair(defaultTag)
+        
+        let testString = "Testing Encryption"
+
+        let encryptedString = keyPair?.encrypt(testString)
+        
+        XCTAssertNotNil(encryptedString, "should return an encrypted string")
+    }
+    
+    func testDecryption() {
+        let keyPair = APEncryptRSA.getKeyPair(defaultTag)
+        
+        let testString = "Testing Encryption"
+        let encryptedString = keyPair?.encrypt(testString)
+        let decryptedString = keyPair?.decryptString(encryptedString!)
+        
+        XCTAssertEqual(testString, "Testing Encryption", "")
+        XCTAssertEqual(testString, decryptedString!, "decrypted string should be the same as the original string")
+    }
 }
