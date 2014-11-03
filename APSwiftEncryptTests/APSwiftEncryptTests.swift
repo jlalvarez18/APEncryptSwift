@@ -9,6 +9,8 @@
 import UIKit
 import XCTest
 
+let defaultTag = "com.alvarezproductions"
+
 class APSwiftEncryptTests: XCTestCase {
     
     override func setUp() {
@@ -21,16 +23,21 @@ class APSwiftEncryptTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
+    func testKeyGenerationWithTag() {
+        let keyPair = APEncryptRSA.generateRSAPair(APEncryptRSASize.Size512, tagIdentifier: defaultTag)
+        
+        XCTAssertNotNil(keyPair!, "keyPair should not be nil")
     }
     
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
-        }
+    func testKeyGenerationWithoutTag() {
+        let keyPair = APEncryptRSA.generateRSAPair(APEncryptRSASize.Size512, tagIdentifier: nil)
+        
+        XCTAssertNotNil(keyPair!, "keyPair should not be nil")
     }
     
+    func testKeyPairRetrieval() {
+        let keyPair = APEncryptRSA.getKeyPair(defaultTag)
+        
+        XCTAssertNotNil(keyPair!, "keyPair should not be nil")
+    }
 }

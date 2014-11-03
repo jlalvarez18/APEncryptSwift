@@ -13,6 +13,8 @@
 		0D27F9CA1A07CE2600B00C5B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0D27F9C91A07CE2600B00C5B /* Images.xcassets */; };
 		0D27F9CD1A07CE2600B00C5B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0D27F9CB1A07CE2600B00C5B /* LaunchScreen.xib */; };
 		0D27F9D91A07CE2600B00C5B /* APSwiftEncryptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */; };
+		0D27F9E31A07CE3C00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
+		0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,7 @@
 		0D27F9D21A07CE2600B00C5B /* APSwiftEncryptTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = APSwiftEncryptTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D27F9D71A07CE2600B00C5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APSwiftEncryptTests.swift; sourceTree = "<group>"; };
+		0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APEncryptRSA.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +86,7 @@
 				0D27F9C91A07CE2600B00C5B /* Images.xcassets */,
 				0D27F9CB1A07CE2600B00C5B /* LaunchScreen.xib */,
 				0D27F9C01A07CE2600B00C5B /* Supporting Files */,
+				0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */,
 			);
 			path = APSwiftEncrypt;
 			sourceTree = "<group>";
@@ -213,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D27F9C51A07CE2600B00C5B /* ViewController.swift in Sources */,
+				0D27F9E31A07CE3C00B00C5B /* APEncryptRSA.swift in Sources */,
 				0D27F9C31A07CE2600B00C5B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -222,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0D27F9D91A07CE2600B00C5B /* APSwiftEncryptTests.swift in Sources */,
+				0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
