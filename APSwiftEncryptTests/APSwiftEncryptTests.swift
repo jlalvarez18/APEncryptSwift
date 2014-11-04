@@ -11,7 +11,7 @@ import XCTest
 
 let defaultTag = "com.alvarezproductions"
 
-class APSwiftEncryptTests: XCTestCase {
+class APSwiftEncryptRSATests: XCTestCase {
     
     override func setUp() {
         super.setUp()

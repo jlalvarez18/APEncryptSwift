@@ -169,49 +169,25 @@ private extension APEncryptRSA {
     
     class func getKeyRef(tag: String) -> SecKeyRef? {
         var query = keyQuery(tag)
-        query[kSecReturnRef] = true
         
-        var typeRef: Unmanaged<AnyObject>?
+        let keyRef = APKeychainService.performKeyQuery(query) as SecKeyRef?
         
-        let status = SecItemCopyMatching(query, &typeRef)
-        
-        let opaqueTypeRef = typeRef?.toOpaque()
-        
-        if let ref = opaqueTypeRef {
-            let key: SecKeyRef = Unmanaged<SecKeyRef>.fromOpaque(ref).takeUnretainedValue()
-            
-            return key
-        }
-        
-        return nil
+        return keyRef
     }
     
     class func getKeyData(tag: String) -> NSData? {
         var query = keyQuery(tag)
-        query[kSecReturnData] = true
         
-        var dataTypeRef: Unmanaged<AnyObject>?
+        let keyData = APKeychainService.performKeyDataQuery(query)
         
-        let status = SecItemCopyMatching(query, &dataTypeRef)
-        
-        let keyData = dataTypeRef?.toOpaque()
-        
-        if let key = keyData {
-            let data: NSData = Unmanaged<NSData>.fromOpaque(key).takeUnretainedValue()
-            
-            return data
-        }
-        
-        return nil
+        return keyData
     }
     
-    class func keyQuery(tag: String) -> [String: AnyObject] {
-        let query: [String: AnyObject] = [
-            kSecClass: kSecClassKey,
-            kSecAttrKeyType: kSecAttrKeyTypeRSA,
-            kSecAttrApplicationTag: tag,
-            kSecAttrAccessible: kSecAttrAccessibleWhenUnlocked
-        ]
+    class func keyQuery(tag: String) -> APKeychainQuery {
+        let query = APKeychainQuery(key: APSecClassKey.Key)
+        query.keyType = APSecKeyType.RSA
+        query.applicationTag = tag
+        query.accessible = APSecAccessible.WhenUnlocked
         
         return query
     }

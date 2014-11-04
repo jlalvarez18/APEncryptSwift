@@ -9,23 +9,32 @@
 import Foundation
 import Security
 
-struct APKeychainQuery {
-    let classKey: APSecClassKey // kSecClass
+class APKeychainQuery {
+
+    let classKey: APSecClassKey
     
     var accessible: APSecAccessible? {
         didSet {
             queryDict[kSecAttrAccessible] = accessible?.getValue()
         }
     }
+    
     var accessControl: AnyObject? // kSecAttrAccessControl
     var accessGroup: AnyObject? // kSecAttrAccessGroup
+    
     var applicationLabel: String? {
         didSet {
             queryDict[kSecAttrApplicationLabel] = applicationLabel
         }
     }
     
-    var applicationTag: NSData? // kSecAttrApplicationTag
+    var applicationTag: String? {
+        didSet {
+            let tagData = applicationTag?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+            queryDict[kSecAttrApplicationTag] = tagData?
+        }
+    }
+    
     var synchronizable: Bool? // kSecAttrSynchronizable
     var description: String? // kSecAttrDescription
     var comment: String? // kSecAttrComment
@@ -42,28 +51,100 @@ struct APKeychainQuery {
     var path: String? // kSecAttrPath
     var keySizeInBits: Int? // kSecAttrKeySizeInBits
     
+    var keyType: APSecKeyType? {
+        didSet {
+            queryDict[kSecAttrKeyType] = keyType?.getValue()
+        }
+    }
+    
     private var queryDict: [String: AnyObject] = [:]
     
     init(key: APSecClassKey) {
         classKey = key
+        
+        queryDict[kSecClass] = classKey.getValue()
+    }
+    
+    func getQueryDict() -> [String: AnyObject] {
+        return queryDict
     }
 }
 
 class APKeychainService {
-    class func getKeyRef(query: APKeychainQuery) -> Any? {
+    
+    // the result can be any of the following:
+    // SecKeychainItemRef, SecKeyRef, SecCertificateRef, or SecIdentityRef
+    class func performKeyQuery(query: APKeychainQuery) -> Any? {
+        var typeRef: Unmanaged<AnyObject>?
+        
+        var queryDict = query.getQueryDict()
+        queryDict[kSecReturnRef] = true
+        
+        let status = SecItemCopyMatching(queryDict, &typeRef)
+        
+        if status == errSecSuccess {
+            let opaqueTypeRef = typeRef?.toOpaque()
+            
+            if let ref = opaqueTypeRef {
+                let key: SecKeyRef = Unmanaged<SecKeyRef>.fromOpaque(ref).takeUnretainedValue()
+                
+                return key
+            }
+        }
+        
         return nil
     }
     
-    class func getKeyData(query: APKeychainQuery) -> NSData? {
+    class func performKeyDataQuery(query: APKeychainQuery) -> NSData? {
+        var dataTypeRef: Unmanaged<AnyObject>?
+        
+        var queryDict = query.getQueryDict()
+        queryDict[kSecReturnData] = true
+        
+        let status = SecItemCopyMatching(queryDict, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            let keyData = dataTypeRef?.toOpaque()
+            
+            if let key = keyData {
+                let data: NSData = Unmanaged<NSData>.fromOpaque(key).takeUnretainedValue()
+                
+                return data
+            }
+        }
+        
         return nil
     }
     
-    class func getKeyAttributes(query: APKeychainQuery) -> [String: AnyObject]? {
+    typealias APDictionary = Dictionary<NSObject, AnyObject>
+    
+    class func performKeyAttributesQuery(query: APKeychainQuery) -> APDictionary? {
+        var dataTypeRef: Unmanaged<AnyObject>?
+        
+        var queryDict = query.getQueryDict()
+        queryDict[kSecReturnAttributes] = true
+        
+        let status = SecItemCopyMatching(queryDict, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            let opaque = dataTypeRef?.toOpaque()
+            
+            if let op = opaque {
+                let keyAttr: APDictionary = Unmanaged<NSDictionary>.fromOpaque(op).takeUnretainedValue()
+                
+                return keyAttr
+            }
+        }
+        
         return nil
     }
     
     class func getKeyPersistentRef(query: APKeychainQuery) -> NSData? {
         return nil
+    }
+    
+    class func addItem() {
+        
     }
 }
 
@@ -165,15 +246,64 @@ enum APSecProtocol {
     case IMAPS      // kSecAttrProtocolIMAPS
     case IRCS       // kSecAttrProtocolIRCS
     case POP3S      // kSecAttrProtocolPOP3S
+    
+    func getValue() -> String {
+        switch self {
+        case .FTP: return kSecAttrProtocolFTP
+        case .FTPAccount: return kSecAttrProtocolFTPAccount
+        case .HTTP: return kSecAttrProtocolHTTP
+        case .IRC: return kSecAttrProtocolIRC
+        case .NNTP: return kSecAttrProtocolNNTP
+        case .POP3: return kSecAttrProtocolPOP3
+        case .SMTP: return kSecAttrProtocolSMTP
+        case .SOCKS: return kSecAttrProtocolSOCKS
+        case .IMAP: return kSecAttrProtocolIMAP
+        case .LDAP: return kSecAttrProtocolLDAP
+        case .AppleTalk: return kSecAttrProtocolAppleTalk
+        case .AFP: return kSecAttrProtocolAFP
+        case .Telnet: return  kSecAttrProtocolTelnet
+        case .SSH: return kSecAttrProtocolSSH
+        case .FTPS: return kSecAttrProtocolFTPS
+        case .HTTPS: return kSecAttrProtocolHTTPS
+        case .HTTPProxy: return kSecAttrProtocolHTTPProxy
+        case .HTTPSProxy: return kSecAttrProtocolHTTPSProxy
+        case .FTPProxy: return kSecAttrProtocolFTPProxy
+        case .SMB: return kSecAttrProtocolSMB
+        case .RSTP: return kSecAttrProtocolRTSP
+        case .RTSPProxy: return kSecAttrProtocolRTSPProxy
+        case .DAAP: return kSecAttrProtocolDAAP
+        case .EPPC: return kSecAttrProtocolEPPC
+        case .IPP: return kSecAttrProtocolIPP
+        case .NNTPS: return kSecAttrProtocolNNTPS
+        case .LDAPS: return kSecAttrProtocolLDAPS
+        case .TelnetS: return kSecAttrProtocolTelnetS
+        case .IMAPS: return kSecAttrProtocolIMAPS
+        case .IRCS: return kSecAttrProtocolIRCS
+        case .POP3S: return kSecAttrProtocolPOP3S
+        }
+    }
 }
 
 enum APSecAuthenticationType {
-    case NTLM       // kSecAttrAuthenticationTypeNTLM.
-    case MSN        // kSecAttrAuthenticationTypeMSN.
-    case DPA        // kSecAttrAuthenticationTypeDPA.
-    case RPA        // kSecAttrAuthenticationTypeRPA.
-    case HTTPBasic  // kSecAttrAuthenticationTypeHTTPBasic.
-    case HTTPDigest // kSecAttrAuthenticationTypeHTTPDigest.
-    case HTMLForm   // kSecAttrAuthenticationTypeHTMLForm.
-    case Default    // kSecAttrAuthenticationTypeDefault.
+    case NTLM       // kSecAttrAuthenticationTypeNTLM
+    case MSN        // kSecAttrAuthenticationTypeMSN
+    case DPA        // kSecAttrAuthenticationTypeDPA
+    case RPA        // kSecAttrAuthenticationTypeRPA
+    case HTTPBasic  // kSecAttrAuthenticationTypeHTTPBasic
+    case HTTPDigest // kSecAttrAuthenticationTypeHTTPDigest
+    case HTMLForm   // kSecAttrAuthenticationTypeHTMLForm
+    case Default    // kSecAttrAuthenticationTypeDefault
+    
+    func getValue() -> String {
+        switch self {
+        case .NTLM: return kSecAttrAuthenticationTypeNTLM
+        case .MSN: return kSecAttrAuthenticationTypeMSN
+        case .DPA: return kSecAttrAuthenticationTypeDPA
+        case .RPA: return kSecAttrAuthenticationTypeRPA
+        case .HTTPBasic: return kSecAttrAuthenticationTypeHTTPBasic
+        case .HTTPDigest: return kSecAttrAuthenticationTypeHTTPDigest
+        case .HTMLForm: return kSecAttrAuthenticationTypeHTMLForm
+        case .Default: return kSecAttrAuthenticationTypeDefault
+        }
+    }
 }

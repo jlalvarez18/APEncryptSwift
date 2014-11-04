@@ -16,6 +16,8 @@
 		0D27F9E31A07CE3C00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
 		0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
 		0D27F9E61A08412F00B00C5B /* APKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E51A08412F00B00C5B /* APKeychainService.swift */; };
+		0DBC22761A0953EC001417B1 /* APSwiftEncryptQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */; };
+		0DBC22771A09541B001417B1 /* APKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E51A08412F00B00C5B /* APKeychainService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +43,7 @@
 		0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APSwiftEncryptTests.swift; sourceTree = "<group>"; };
 		0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APEncryptRSA.swift; sourceTree = "<group>"; };
 		0D27F9E51A08412F00B00C5B /* APKeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APKeychainService.swift; sourceTree = "<group>"; };
+		0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APSwiftEncryptQueryTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,7 @@
 		0D27F9D51A07CE2600B00C5B /* APSwiftEncryptTests */ = {
 			isa = PBXGroup;
 			children = (
+				0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */,
 				0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */,
 				0D27F9D61A07CE2600B00C5B /* Supporting Files */,
 			);
@@ -230,8 +234,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DBC22771A09541B001417B1 /* APKeychainService.swift in Sources */,
 				0D27F9D91A07CE2600B00C5B /* APSwiftEncryptTests.swift in Sources */,
 				0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */,
+				0DBC22761A0953EC001417B1 /* APSwiftEncryptQueryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +421,7 @@
 				0D27F9DE1A07CE2600B00C5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0D27F9DF1A07CE2600B00C5B /* Build configuration list for PBXNativeTarget "APSwiftEncryptTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +430,7 @@
 				0D27F9E11A07CE2600B00C5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
