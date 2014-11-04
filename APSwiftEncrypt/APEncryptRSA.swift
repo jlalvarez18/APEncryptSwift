@@ -38,6 +38,11 @@ class APRSAKeyPair {
         
         let blockSize = SecKeyGetBlockSize(publicKey)
         
+        if blockSize < plainTextLength {
+            println("String length is too long to sign with this key, max length is \(blockSize) and actual length is \(plainTextLength)")
+            return nil
+        }
+        
         let cipherData = NSMutableData(length: Int(blockSize))!
         let cipherBuffer = UnsafeMutablePointer<UInt8>(cipherData.mutableBytes)
         var cipherBufferLength = size_t(cipherData.length)
@@ -70,6 +75,12 @@ class APRSAKeyPair {
         let cipherData = NSData(base64EncodedString: string, options: NSDataBase64DecodingOptions(0))!
         let cipherBuffer = UnsafePointer<UInt8>(cipherData.bytes)
         let cipherSize = size_t(cipherData.length)
+        
+        if cipherSize < blockSize {
+            println("String length is too long to decrypt with this key, max length is \(blockSize) and actual length is \(cipherSize)")
+            
+            return nil
+        }
         
         let plainTextData = NSMutableData(length: Int(blockSize))!
         let plainTextBuffer = UnsafeMutablePointer<UInt8>(plainTextData.mutableBytes)
