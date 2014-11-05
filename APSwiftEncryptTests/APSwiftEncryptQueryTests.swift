@@ -24,12 +24,7 @@ class APSwiftEncryptQueryTests: XCTestCase {
     }
 
     func testExample() {
-        let query = APKeychainQuery(key: APSecClassKey.GenericPassword)
-        query.label = genericPasswordTestLabel
         
-        let key = APKeychainService.performKeyQuery(query) as SecKeyRef
-        
-        XCTAssertNotNil(key, "should return a key")
     }
 
     func testPerformanceExample() {

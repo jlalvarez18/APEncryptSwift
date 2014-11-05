@@ -9,67 +9,6 @@
 import Foundation
 import Security
 
-class APKeychainQuery {
-
-    let classKey: APSecClassKey
-    
-    var accessible: APSecAccessible? {
-        didSet {
-            queryDict[kSecAttrAccessible] = accessible?.getValue()
-        }
-    }
-    
-    var accessControl: AnyObject? // kSecAttrAccessControl
-    var accessGroup: AnyObject? // kSecAttrAccessGroup
-    
-    var applicationLabel: String? {
-        didSet {
-            queryDict[kSecAttrApplicationLabel] = applicationLabel
-        }
-    }
-    
-    var applicationTag: String? {
-        didSet {
-            let tagData = applicationTag?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
-            queryDict[kSecAttrApplicationTag] = tagData?
-        }
-    }
-    
-    var synchronizable: Bool? // kSecAttrSynchronizable
-    var description: String? // kSecAttrDescription
-    var comment: String? // kSecAttrComment
-    var label: String? // kSecAttrLabel
-    var type: UInt? // kSecAttrType
-    var invisible: Bool? // kSecAttrIsInvisible
-    var account: String? // kSecAttrAccount
-    var service: String? // kSecAttrService
-    var securityDomain: String? // kSecAttrSecurityDomain
-    var server: String? // kSecAttrServer
-    var serverProtocol: APSecProtocol? // kSecAttrProtocol
-    var authenticationType: APSecAuthenticationType? // kSecAttrAuthenticationType
-    var port: Int? // kSecAttrPort
-    var path: String? // kSecAttrPath
-    var keySizeInBits: Int? // kSecAttrKeySizeInBits
-    
-    var keyType: APSecKeyType? {
-        didSet {
-            queryDict[kSecAttrKeyType] = keyType?.getValue()
-        }
-    }
-    
-    private var queryDict: [String: AnyObject] = [:]
-    
-    init(key: APSecClassKey) {
-        classKey = key
-        
-        queryDict[kSecClass] = classKey.getValue()
-    }
-    
-    func getQueryDict() -> [String: AnyObject] {
-        return queryDict
-    }
-}
-
 class APKeychainService {
     
     // the result can be any of the following:
@@ -140,11 +79,169 @@ class APKeychainService {
     }
     
     class func getKeyPersistentRef(query: APKeychainQuery) -> NSData? {
+        var dataTypeRef: Unmanaged<AnyObject>?
+        
+        var queryDict = query.getQueryDict()
+        queryDict[kSecReturnPersistentRef] = true
+        
+        let status = SecItemCopyMatching(queryDict, &dataTypeRef)
+        
+        if status == errSecSuccess {
+            let opaque = dataTypeRef?.toOpaque()
+            
+            if let op = opaque {
+                let data: NSData = Unmanaged<NSData>.fromOpaque(op).takeUnretainedValue()
+                
+                return data
+            }
+        }
+        
         return nil
     }
     
-    class func addItem() {
+}
+
+class APKeychainQuery {
+    
+    let classKey: APSecClassKey
+    
+    var accessible: APSecAccessible? {
+        didSet {
+            queryDict[kSecAttrAccessible] = accessible?.getValue()
+        }
+    }
+    
+    var accessControl: SecAccessControlRef? {
+        didSet {
+            queryDict[kSecAttrAccessControl] = accessControl
+        }
+    }
+    
+    var accessGroup: String? {
+        didSet {
+            queryDict[kSecAttrAccessGroup] = accessGroup
+        }
+    }
+    
+    var applicationLabel: String? {
+        didSet {
+            queryDict[kSecAttrApplicationLabel] = applicationLabel
+        }
+    }
+    
+    var applicationTag: String? {
+        didSet {
+            let tagData = applicationTag?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+            queryDict[kSecAttrApplicationTag] = tagData?
+        }
+    }
+    
+    var synchronizable: Bool? {
+        didSet {
+            queryDict[kSecAttrSynchronizable] = synchronizable
+        }
+    }
+    
+    var description: String? {
+        didSet {
+            queryDict[kSecAttrDescription] = description
+        }
+    }
+    
+    var comment: String? {
+        didSet {
+            queryDict[kSecAttrComment] = comment
+        }
+    }
+    
+    var label: String? {
+        didSet {
+            queryDict[kSecAttrLabel] = label
+        }
+    }
+    
+    var type: UInt? {
+        didSet {
+            queryDict[kSecAttrType] = type
+        }
+    }
+    
+    var invisible: Bool? {
+        didSet {
+            queryDict[kSecAttrIsInvisible] = invisible
+        }
+    }
+    
+    var account: String? {
+        didSet {
+            queryDict[kSecAttrAccount] = account
+        }
+    }
+    
+    var service: String? {
+        didSet {
+            queryDict[kSecAttrService] = service
+        }
+    }
+    
+    var securityDomain: String? {
+        didSet {
+            queryDict[kSecAttrSecurityDomain] = securityDomain
+        }
+    }
+    
+    var server: String? {
+        didSet {
+            queryDict[kSecAttrServer] = server
+        }
+    }
+    
+    var serverProtocol: APSecProtocol? {
+        didSet {
+            queryDict[kSecAttrProtocol] = serverProtocol?.getValue()
+        }
+    }
+    
+    var authenticationType: APSecAuthenticationType? {
+        didSet {
+            queryDict[kSecAttrAuthenticationType] = authenticationType?.getValue()
+        }
+    }
+    
+    var port: Int? {
+        didSet {
+            queryDict[kSecAttrPort] = port
+        }
+    }
+    
+    var path: String? {
+        didSet {
+            queryDict[kSecAttrPath] = path
+        }
+    }
+    
+    var keySizeInBits: Int? {
+        didSet {
+            queryDict[kSecAttrKeySizeInBits] = keySizeInBits
+        }
+    }
+    
+    var keyType: APSecKeyType? {
+        didSet {
+            queryDict[kSecAttrKeyType] = keyType?.getValue()
+        }
+    }
+    
+    private var queryDict: [String: AnyObject] = [:]
+    
+    init(key: APSecClassKey) {
+        classKey = key
         
+        queryDict[kSecClass] = classKey.getValue()
+    }
+    
+    func getQueryDict() -> [String: AnyObject] {
+        return queryDict
     }
 }
 
