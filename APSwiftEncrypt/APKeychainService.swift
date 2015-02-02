@@ -232,6 +232,12 @@ class APKeychainQuery {
         }
     }
     
+    var itemList: [AnyObject]? {
+        didSet {
+            queryDict[kSecMatchItemList] = itemList
+        }
+    }
+    
     private var queryDict: [String: AnyObject] = [:]
     
     init(key: APSecClassKey) {
