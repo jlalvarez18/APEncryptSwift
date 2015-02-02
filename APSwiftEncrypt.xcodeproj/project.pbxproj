@@ -16,7 +16,6 @@
 		0D27F9E31A07CE3C00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
 		0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */; };
 		0D27F9E61A08412F00B00C5B /* APKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E51A08412F00B00C5B /* APKeychainService.swift */; };
-		0DBC22761A0953EC001417B1 /* APSwiftEncryptQueryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */; };
 		0DBC22771A09541B001417B1 /* APKeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D27F9E51A08412F00B00C5B /* APKeychainService.swift */; };
 		0DF3F1421A66D2500015F59A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DF3F1411A66D2500015F59A /* ViewController.m */; };
 /* End PBXBuildFile section */
@@ -44,7 +43,6 @@
 		0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APSwiftEncryptTests.swift; sourceTree = "<group>"; };
 		0D27F9E21A07CE3C00B00C5B /* APEncryptRSA.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APEncryptRSA.swift; sourceTree = "<group>"; };
 		0D27F9E51A08412F00B00C5B /* APKeychainService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APKeychainService.swift; sourceTree = "<group>"; };
-		0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APSwiftEncryptQueryTests.swift; sourceTree = "<group>"; };
 		0DF3F13F1A66D2500015F59A /* APSwiftEncrypt-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "APSwiftEncrypt-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		0DF3F1401A66D2500015F59A /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = APSwiftEncrypt/ViewController.h; sourceTree = "<group>"; };
 		0DF3F1411A66D2500015F59A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = APSwiftEncrypt/ViewController.m; sourceTree = "<group>"; };
@@ -115,7 +113,6 @@
 		0D27F9D51A07CE2600B00C5B /* APSwiftEncryptTests */ = {
 			isa = PBXGroup;
 			children = (
-				0DBC22751A0953EC001417B1 /* APSwiftEncryptQueryTests.swift */,
 				0D27F9D81A07CE2600B00C5B /* APSwiftEncryptTests.swift */,
 				0D27F9D61A07CE2600B00C5B /* Supporting Files */,
 			);
@@ -245,7 +242,6 @@
 				0DBC22771A09541B001417B1 /* APKeychainService.swift in Sources */,
 				0D27F9D91A07CE2600B00C5B /* APSwiftEncryptTests.swift in Sources */,
 				0D27F9E41A07E08D00B00C5B /* APEncryptRSA.swift in Sources */,
-				0DBC22761A0953EC001417B1 /* APSwiftEncryptQueryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

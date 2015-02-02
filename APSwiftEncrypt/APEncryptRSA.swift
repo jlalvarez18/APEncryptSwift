@@ -274,7 +274,7 @@ extension String {
     :param: keys    KeyPair object that contains the private key required for decryption
     :param: padding EncryptRSAPadding type
     
-    :returns: returns a String decrypted from Base64 encoded string
+    :returns: String decrypted from Base64 encoded string
     */
     
     func decrypt(keys: KeyPair, padding: EncryptRSAPadding = .PKCS1) -> String? {
@@ -292,9 +292,9 @@ extension NSData {
     Sign data with private key
     
     :param: keys      KeyPair object that contains the private key required for signing
-    :param: algorithm <#algorithm description#>
+    :param: algorithm EncryptRSAHMACAlgorithm type that defines the data hash
     
-    :returns: <#return value description#>
+    :returns: signed NSData object
     */
     func sign(keys: KeyPair, algorithm: EncryptRSAHMACAlgorithm = .SHA1) -> NSData? {
         let blockSize = SecKeyGetBlockSize(keys.privateKey)
@@ -439,28 +439,14 @@ private extension EncryptRSA {
         }
     }
     
-    static func getKeyData(tag: String) -> NSData? {
-        var queryDict = keyQueryDictionary(tag)
-        
-        return getKeyData(queryDict)
-    }
-    
     static func getKeyData(key: SecKeyRef) -> NSData? {
-        var query: DictionaryType = [kSecMatchItemList: [key]]
-        
-        let keyData = getKeyData(query)
-        
-        if keyData != nil {
-            return keyData
-        }
-        
-        var attributes = keyQueryDictionary("com.apencryptrsa.temporary_tag_for_key_data")
-        attributes[kSecValueRef] = key
-        attributes[kSecReturnData] = true
+        var query = keyQueryDictionary("com.apencryptrsa.temporary_tag_for_key_data")
+        query[kSecValueRef] = key
+        query[kSecReturnData] = true
         
         var dataTypeRef: Unmanaged<AnyObject>?
         
-        let status = SecItemAdd(attributes, &dataTypeRef)
+        let status = SecItemAdd(query, &dataTypeRef)
         
         if status == errSecSuccess {
             let keyData = dataTypeRef?.toOpaque()
@@ -468,29 +454,7 @@ private extension EncryptRSA {
             if let key = keyData {
                 let data: NSData = Unmanaged<NSData>.fromOpaque(key).takeUnretainedValue()
                 
-                SecItemDelete(attributes)
-                
-                return data
-            }
-        }
-        
-        return nil
-    }
-    
-    static func getKeyData(query: DictionaryType) -> NSData? {
-        var queryDict = query
-        
-        queryDict[kSecReturnData] = true
-        
-        var dataTypeRef: Unmanaged<AnyObject>?
-        
-        let status = SecItemCopyMatching(queryDict, &dataTypeRef)
-        
-        if status == errSecSuccess {
-            let keyData = dataTypeRef?.toOpaque()
-            
-            if let key = keyData {
-                let data: NSData = Unmanaged<NSData>.fromOpaque(key).takeUnretainedValue()
+                SecItemDelete(query)
                 
                 return data
             }
@@ -543,6 +507,7 @@ private extension EncryptRSA {
 }
 
 private extension String {
+    
     func publicKeyIdentifier() -> String {
         return self + ".public"
     }

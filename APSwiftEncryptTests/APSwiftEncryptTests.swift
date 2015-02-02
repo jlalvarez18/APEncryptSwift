@@ -42,9 +42,6 @@ class SwiftEncryptRSATests: XCTestCase {
     func testKeyGenerationWithoutTag() {
         let keyPair = EncryptRSA.generateRSAPair(EncryptRSASize.Size512, tagIdentifier: nil)
         
-        let publicKeyData = keyPair?.getPublicKeyData()
-        let privateKeyData = keyPair?.getPrivateKeyData()
-        
         XCTAssertTrue(keyPair != nil, "keyPair should not be nil")
     }
     
@@ -53,6 +50,26 @@ class SwiftEncryptRSATests: XCTestCase {
         let retrievedKeyPair = EncryptRSA.getKeyPairWith(defaultTag)
         
         XCTAssertTrue(retrievedKeyPair != nil, "retrievedKeyPair should not be nil")
+    }
+    
+    func testKeyPairDataRetrievalWithTag() {
+        let keyPair = EncryptRSA.generateRSAPair(EncryptRSASize.Size512, tagIdentifier: defaultTag)!
+        
+        let publicKeyData = keyPair.getPublicKeyData()
+        let privateKeyData = keyPair.getPrivateKeyData()
+        
+        XCTAssertTrue(publicKeyData != nil, "should be able to retrieve public key data saved to keychain")
+        XCTAssertTrue(privateKeyData != nil, "should be able to retrieve private key data saved to keychain")
+    }
+    
+    func testKeyPairDataRetrievalWithoutTag() {
+        let keyPair = EncryptRSA.generateRSAPair(EncryptRSASize.Size512, tagIdentifier: nil)!
+        
+        let publicKeyData = keyPair.getPublicKeyData()
+        let privateKeyData = keyPair.getPrivateKeyData()
+        
+        XCTAssertTrue(publicKeyData != nil, "should be able to retrieve public key data saved to keychain")
+        XCTAssertTrue(privateKeyData != nil, "should be able to retrieve private key data saved to keychain")
     }
     
     func testEncryption() {
